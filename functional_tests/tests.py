@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-file_name：'functional_tests.py '
+file_name：'tests.py '
 author：'baobinghuan'
 create_time：'2018/9/26'
 """
+from django.test import LiveServerTestCase # LiveServerTestCase是django提供创建测试数据库，并开启服务，让功能测试在其中运行
 from selenium import webdriver
 from selenium.webdriver.common.keys import  Keys
-import unittest
 import time
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 	def setUp(self):
 		self.browser = webdriver.Firefox()
 	
@@ -24,7 +24,7 @@ class NewVisitorTest(unittest.TestCase):
 		self.assertIn(row_text, [row.text for row in rows])
 	
 	def test_can_start_a_list_and_retrieve_it_later(self):
-		self.browser.get('http://localhost:8000/lists')
+		self.browser.get(f'{self.live_server_url}/lists')
 		self.assertIn('To-Do lists', self.browser.title)
 		header_text = self.browser.find_element_by_tag_name('h1').text
 		self.assertIn('To-Do', header_text)
@@ -56,6 +56,3 @@ class NewVisitorTest(unittest.TestCase):
 
 
 
-if __name__ == "__main__":
-	unittest.main(warnings='ignore')
-	
